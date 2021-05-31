@@ -14,6 +14,9 @@ export function Home(): ReactElement {
             <Link href="/cryptolith/01">
               <h5>Lith 0</h5>
             </Link>
+            <video controls width="100">
+              <source src="../assets/lith0.webm" type="video/webm"></source>
+            </video>
           </Paper>
         </Grid>
         <Grid item xs={4}>

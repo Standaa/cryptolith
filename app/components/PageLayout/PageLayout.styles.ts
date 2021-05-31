@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core";
 export const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    flexGrow: 1,
   },
   appBar: {
     background: "transparent",
@@ -19,6 +20,9 @@ export const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: "bolder",
     textTransform: "uppercase",
+    flexGrow: 1,
+    textAlign: "center",
+    marginLeft: "16vw",
   },
   content: {
     padding: theme.spacing(2),

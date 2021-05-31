@@ -4,6 +4,7 @@ import React, {
   ReactElement,
   ReactNode,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -24,6 +25,8 @@ export type WalletContextValues = {
   providerName: string;
   setProviderName: any;
   setNetworkUrl: any;
+  connected: boolean;
+  setConnected: any;
   wallet: any;
   // poolProgram: Program;
   connection: web3.Connection;
@@ -43,31 +46,24 @@ export default function WalletProvider(
   props: PropsWithChildren<ReactNode>
 ): ReactElement {
   const [providerName, setProviderName] = useState<string>("Phantom");
+  const [connected, setConnected] = useState<boolean>(false);
   const [networkUrl, setNetworkUrl] = useState(NETWORK_URL_KEY);
+  let [wallet, setWallet] = useState<any>(undefined);
 
-  //   const seed = "testSeed";
+  // const seed = "testSeed";
   // let userWallet: any;
   // let derivedAccount: web3.PublicKey;
   // let provider: Provider;
   // let cryptolithProgram: Program;
 
-  const opts: web3.ConfirmOptions = {
-    preflightCommitment: "singleGossip",
-    commitment: "confirmed",
-  };
-
   // const programId = new web3.PublicKey(config.programId);
   // const programId = new web3.PublicKey(PROGRAM_ID_KEY);
 
-  const { provider, wallet, connection } = useMemo(() => {
+  const { provider, connection } = useMemo(() => {
     const opts: web3.ConfirmOptions = {
       preflightCommitment: "singleGossip",
-      commitment: "singleGossip",
+      commitment: "confirmed",
     };
-
-    console.log("CALLED");
-
-    let wallet;
 
     switch (providerName) {
       case "Phantom":
@@ -88,17 +84,55 @@ export default function WalletProvider(
         wallet = new Wallet(WALLET_URL_KEY, NETWORK_URL_KEY);
     }
 
+    setWallet(wallet);
+
     const connection = new web3.Connection(NETWORK_URL_KEY, "root");
     const provider = new Provider(connection, wallet, opts);
     // const poolProgram = new Program(idl as Idl, programId, provider);
 
     return {
       provider,
-      wallet,
       // poolProgram,
       connection,
     };
   }, [providerName, networkUrl]);
+
+  useEffect(() => {
+    if (wallet) {
+      wallet.on("connect", () => {
+        if (wallet?.publicKey) {
+          console.log("connected");
+          setConnected(true);
+          const walletPublicKey = wallet.publicKey.toBase58();
+          const keyToDisplay =
+            walletPublicKey.length > 20
+              ? `${walletPublicKey.substring(
+                  0,
+                  7
+                )}.....${walletPublicKey.substring(
+                  walletPublicKey.length - 7,
+                  walletPublicKey.length
+                )}`
+              : walletPublicKey;
+
+          console.log("Connected to:", keyToDisplay);
+        }
+      });
+
+      wallet.on("disconnect", () => {
+        setConnected(false);
+      });
+    }
+
+    return () => {
+      console.log("Should not pass");
+      setConnected(false);
+      if (wallet && wallet.connected) {
+        wallet.disconnect();
+        setConnected(false);
+      }
+    };
+  }, [wallet]);
 
   return (
     <WalletContext.Provider
@@ -108,6 +142,8 @@ export default function WalletProvider(
         setProviderName,
         setNetworkUrl,
         wallet,
+        connected,
+        setConnected,
         // poolProgram,
         connection,
       }}

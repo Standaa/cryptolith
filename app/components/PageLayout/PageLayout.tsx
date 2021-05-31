@@ -1,10 +1,18 @@
 import React, { useEffect, ReactNode, ReactElement } from "react";
 
-import { CssBaseline, ThemeProvider, AppBar, Toolbar } from "@material-ui/core";
+import {
+  CssBaseline,
+  ThemeProvider,
+  AppBar,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
 
 import { theme } from "../../themes/defaultTheme";
 import { useStyles } from "./PageLayout.styles";
 import { WalletConnectBtn } from "../WalletConnectBtn";
+import { WalletConnectedBtn } from "../WalletConnectedBtn";
+import { useWallet } from "../Wallet/WalletProvider";
 
 interface Props {
   title: string;
@@ -13,6 +21,7 @@ interface Props {
 
 export function PageLayout({ title, children }: Props): ReactElement {
   const classes = useStyles({});
+  const { connected, wallet } = useWallet();
 
   useEffect(() => {
     document.title = title;
@@ -29,8 +38,11 @@ export function PageLayout({ title, children }: Props): ReactElement {
           className={classes.appBar}
         >
           <Toolbar className={`${classes.toolbar}`}>
-            <h1 className={classes.title}>Cryptolith</h1>
-            <WalletConnectBtn />
+            <Typography variant="h6" className={classes.title}>
+              Cryptolith
+            </Typography>
+            {!connected && <WalletConnectBtn />}
+            {connected && <WalletConnectedBtn />}
           </Toolbar>
         </AppBar>
         <div className={classes.content}>

@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 
 export const useStyles = makeStyles((theme) => ({
-  walletConnectBtnContainer: {
+  container: {
     alignSelf: "end",
     height: "50px",
     marginLeft: "1rem",
@@ -27,13 +27,11 @@ export const useStyles = makeStyles((theme) => ({
   },
   providerBtnContainer: {
     display: "flex",
-    flexDirection: "column",
-    textAlign: "initial",
+    flexDirection: "row",
+    alignItems: "center",
   },
-  providerText: {
-    color: "light-gray",
-    fontWeight: 100,
-    fontSize: "10px",
+  walletAddress: {
+    color: "primary",
   },
   walletConnMenu: {
     color: "#3f51b5",
