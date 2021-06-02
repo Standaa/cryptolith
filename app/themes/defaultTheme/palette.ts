@@ -1,7 +1,7 @@
 export const palette = {
   common: {
     white: "#ffffff",
-    black: "#0e0f11",
+    black: "#000000",
     darkRed: "#CC3B14",
     darkPurple: "#990099",
     darkGreen: "#00994D",
@@ -9,11 +9,11 @@ export const palette = {
     darkOrange: "#CC7014",
   },
   secondary: {
-    lighter: "#0e0f11",
-    light: "#0e0f11",
-    main: "#0e0f11",
-    dark: "#0e0f11",
-    contrastText: "#0e0f11",
+    lighter: "#000000",
+    light: "#000000",
+    main: "#000000",
+    dark: "#000000",
+    contrastText: "#000000",
   },
   primary: {
     lighter: "#FFFFFF",
