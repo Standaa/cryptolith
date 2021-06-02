@@ -13,7 +13,7 @@
     "server"
   ],
   "scripts": {
-    "heroku:postbuild": "npm run build --workspace=app",
-    "heroku:start": "npm run start --workspace=server"
+    "heroku-postbuild": "npm run build --workspace=app",
+    "start:heroku": "npm run start --workspace=server"
   }
 }
