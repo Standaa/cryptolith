@@ -13,6 +13,7 @@ import { useStyles } from "./PageLayout.styles";
 import { WalletConnectBtn } from "../WalletConnectBtn";
 import { WalletConnectedBtn } from "../WalletConnectedBtn";
 import { useWallet } from "../Wallet/WalletProvider";
+import { useHistory } from "react-router-dom";
 
 interface Props {
   title: string;
@@ -20,7 +21,8 @@ interface Props {
 }
 
 export function PageLayout({ title, children }: Props): ReactElement {
-  const classes = useStyles({});
+  const classes = useStyles();
+  const history = useHistory();
   const { connected, wallet } = useWallet();
 
   useEffect(() => {
@@ -38,7 +40,14 @@ export function PageLayout({ title, children }: Props): ReactElement {
           className={classes.appBar}
         >
           <Toolbar className={`${classes.toolbar}`}>
-            <Typography className={classes.title}>Cryptolith</Typography>
+            <Typography
+              className={classes.title}
+              onClick={() => {
+                history.push("/");
+              }}
+            >
+              Cryptolith
+            </Typography>
             {!connected && <WalletConnectBtn />}
             {connected && <WalletConnectedBtn />}
           </Toolbar>

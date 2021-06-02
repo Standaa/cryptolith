@@ -8,8 +8,6 @@ import { NotFound } from "./components/NotFound";
 import { Home } from "./pages/Home";
 import { CryptoLith } from "./components/CryptoLith";
 
-// import idl from "../target/idl/test";
-
 export function App(): ReactElement {
   const classes = useStyles();
 

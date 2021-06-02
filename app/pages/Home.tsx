@@ -1,9 +1,9 @@
 import { Grid, Link, Paper } from "@material-ui/core";
 import React, { ReactElement } from "react";
+import { useHistory } from "react-router-dom";
 
 import { useStyles } from "./Home.styles";
 import { PageLayout } from "../components/PageLayout/PageLayout";
-
 import lithvid from "../assets/lith0.webm";
 import { BottomInfo } from "../components/BottomInfo";
 import { LithInfo } from "../components/LithInfo";
@@ -11,11 +11,7 @@ import { LithInfoProps } from "../components/LithInfo/LithInfo";
 
 export function Home(): ReactElement {
   const classes = useStyles();
-
-  const showLith = (lithNumber: number) => {
-    console.log("Nav to Lith", lithNumber);
-    // `/cryptolith/01`
-  };
+  const history = useHistory();
 
   const liths: LithInfoProps[] = [
     {
@@ -92,7 +88,9 @@ export function Home(): ReactElement {
               <Grid key={`sthg+${index}`} item xs={4}>
                 <Paper
                   className={classes.paper}
-                  onClick={() => showLith(index)}
+                  onClick={() => {
+                    history.push(`/cryptolith/${index}`);
+                  }}
                 >
                   <video width="100" autoPlay loop>
                     <source src={lithvid} type="video/webm"></source>

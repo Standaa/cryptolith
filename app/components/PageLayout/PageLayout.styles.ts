@@ -6,7 +6,7 @@ export const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   appBar: {
-    background: "transparent",
+    background: theme.palette.secondary.main,
   },
   toolbar: {
     maxWidth: 1800,
@@ -24,6 +24,7 @@ export const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     marginLeft: "16vw",
     fontSize: "1.2rem",
+    cursor: "pointer",
   },
   content: {
     padding: theme.spacing(2),
