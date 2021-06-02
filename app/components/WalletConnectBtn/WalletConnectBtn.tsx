@@ -30,7 +30,6 @@ export function WalletConnectBtn(): ReactElement {
     <Box className={classes.walletConnectBtnContainer}>
       <Button
         className={classes.btn}
-        color="primary"
         disableElevation
         aria-label="connect wallet"
         onClick={connectWallet}

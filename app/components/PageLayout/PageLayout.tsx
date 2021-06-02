@@ -38,9 +38,7 @@ export function PageLayout({ title, children }: Props): ReactElement {
           className={classes.appBar}
         >
           <Toolbar className={`${classes.toolbar}`}>
-            <Typography variant="h6" className={classes.title}>
-              Cryptolith
-            </Typography>
+            <Typography className={classes.title}>Cryptolith</Typography>
             {!connected && <WalletConnectBtn />}
             {connected && <WalletConnectedBtn />}
           </Toolbar>

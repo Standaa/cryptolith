@@ -12,7 +12,7 @@ export const useStyles = makeStyles((theme) => ({
     maxWidth: 1800,
     width: "100%",
     margin: "0 auto",
-    color: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -23,6 +23,7 @@ export const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     textAlign: "center",
     marginLeft: "16vw",
+    fontSize: "1.2rem",
   },
   content: {
     padding: theme.spacing(2),

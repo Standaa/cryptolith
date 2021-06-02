@@ -7,9 +7,10 @@ export const useStyles = makeStyles((theme) => ({
     marginLeft: "1rem",
   },
   btn: {
-    borderRadius: "3px 0 0 3px",
+    borderRight: "solid white 1px",
+    borderRadius: "0",
     height: "inherit",
-    // background: "#3f51b5",
+    color: theme.palette.common.white,
   },
   chevronBtn: {
     border: 0,
@@ -17,13 +18,9 @@ export const useStyles = makeStyles((theme) => ({
     minWidth: "25px",
     maxWidth: "25px",
     marginLeft: "1px",
-    // background: "#3f51b5",
     borderRadius: "0 3px 3px 0",
     height: "inherit",
-    color: "#3f51b5",
-    // "&:hover": {
-    //   background: "#303F9F",
-    // },
+    color: theme.palette.common.white,
   },
   providerBtnContainer: {
     display: "flex",
@@ -36,6 +33,6 @@ export const useStyles = makeStyles((theme) => ({
     fontSize: "10px",
   },
   walletConnMenu: {
-    color: "#3f51b5",
+    color: theme.palette.common.black,
   },
 }));
