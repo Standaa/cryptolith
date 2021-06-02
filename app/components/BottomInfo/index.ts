@@ -1,0 +1,1 @@
+export { BottomInfo } from "./BottomInfo";
