@@ -1,0 +1,1 @@
+web: sh -c 'cd ./app && npm run start:heroku'
