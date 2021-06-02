@@ -4,71 +4,113 @@ import React, { ReactElement } from "react";
 import { useStyles } from "./Home.styles";
 import { PageLayout } from "../components/PageLayout/PageLayout";
 
+import lithvid from "../assets/lith0.webm";
+import { BottomInfo } from "../components/BottomInfo";
+import { LithInfo } from "../components/LithInfo";
+import { LithInfoProps } from "../components/LithInfo/LithInfo";
+
 export function Home(): ReactElement {
   const classes = useStyles();
+
+  const showLith = (lithNumber: number) => {
+    console.log("Nav to Lith", lithNumber);
+    // `/cryptolith/01`
+  };
+
+  const liths: LithInfoProps[] = [
+    {
+      fundingLevel: 10,
+      committedAmount: 20,
+      height: 3,
+      patrons: 1,
+      geo: "Fréhel",
+    },
+    {
+      fundingLevel: 10,
+      committedAmount: 20,
+      height: 3,
+      patrons: 1,
+      geo: "Fréhel",
+    },
+    {
+      fundingLevel: 10,
+      committedAmount: 20,
+      height: 3,
+      patrons: 1,
+      geo: "Fréhel",
+    },
+    {
+      fundingLevel: 10,
+      committedAmount: 20,
+      height: 3,
+      patrons: 1,
+      geo: "Fréhel",
+    },
+    {
+      fundingLevel: 10,
+      committedAmount: 20,
+      height: 3,
+      patrons: 1,
+      geo: "Fréhel",
+    },
+    {
+      fundingLevel: 10,
+      committedAmount: 20,
+      height: 3,
+      patrons: 1,
+      geo: "Fréhel",
+    },
+    {
+      fundingLevel: 10,
+      committedAmount: 20,
+      height: 3,
+      patrons: 1,
+      geo: "Fréhel",
+    },
+    {
+      fundingLevel: 10,
+      committedAmount: 20,
+      height: 3,
+      patrons: 1,
+      geo: "Fréhel",
+    },
+    {
+      fundingLevel: 10,
+      committedAmount: 20,
+      height: 3,
+      patrons: 1,
+      geo: "Fréhel",
+    },
+  ];
+
   return (
     <PageLayout title={"Cryptolith"}>
       <Grid container className={classes.root} spacing={2}>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>
-            <Link href="/cryptolith/01">
-              <h5>Lith 0</h5>
-            </Link>
-            <video controls width="100">
-              <source src="../assets/lith0.webm" type="video/webm"></source>
-            </video>
-          </Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>
-            <Link href={`/cryptolith/01`}>
-              <h5>Lith 1</h5>
-            </Link>
-          </Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>
-            <Link href={`/cryptolith/01`}>
-              <h5>Lith 2</h5>
-            </Link>
-          </Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>
-            <Link href={`/cryptolith/01`}>
-              <h5>Lith 3</h5>
-            </Link>
-          </Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>
-            <Link href={`/cryptolith/01`}>
-              <h5>Lith 4</h5>
-            </Link>
-          </Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>
-            <Link href={`/cryptolith/01`}>
-              <h5>Lith 5</h5>
-            </Link>
-          </Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>
-            <Link href={`/cryptolith/01`}>
-              <h5>Lith 6</h5>
-            </Link>
-          </Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>
-            <Link href={`/cryptolith/01`}>
-              <h5>Lith 7</h5>
-            </Link>
-          </Paper>
-        </Grid>
+        {liths &&
+          liths.map((lith, index) => {
+            return (
+              <Grid key={`sthg+${index}`} item xs={4}>
+                <Paper
+                  className={classes.paper}
+                  onClick={() => showLith(index)}
+                >
+                  <video width="100" autoPlay loop>
+                    <source src={lithvid} type="video/webm"></source>
+                  </video>
+                  <LithInfo
+                    lithNumber={index}
+                    fundingLevel={lith.fundingLevel}
+                    committedAmount={lith.committedAmount}
+                    height={lith.height}
+                    patrons={lith.patrons}
+                    geo={lith.geo}
+                  />
+                </Paper>
+              </Grid>
+            );
+          })}
       </Grid>
+      <BottomInfo />
     </PageLayout>
   );
 }
