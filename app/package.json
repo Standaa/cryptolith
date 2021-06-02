@@ -1,15 +1,14 @@
 {
-  "name": "cryptolith",
+  "name": "cryptolith-app",
   "version": "1.0.0",
-  "description": "cryptolith",
+  "description": "cryptolith-app",
   "private": true,
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "start": "parcel serve ./index.html",
-    "build": "parcel build ./index.html",
-    "start:heroku": "NODE_ENV=production ts-node server/server.ts"
+    "build": "parcel build ./index.html"
   },
   "author": "",
   "license": "ISC",
@@ -29,9 +28,7 @@
     "@types/react-dom": "^17.0.2",
     "@types/react-query": "^1.1.2",
     "@types/react-router-dom": "^5.1.7",
-    "express": "^4.17.1",
     "parcel-bundler": "^1.12.5",
-    "ts-node": "^10.0.0",
     "typescript": "^4.2.3"
   }
 }
