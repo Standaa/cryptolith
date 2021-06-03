@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "start": "parcel serve ./index.html",
+    "dev": "parcel serve ./index.html",
     "build": "parcel build ./index.html"
   },
   "author": "",
