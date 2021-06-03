@@ -1,6 +1,9 @@
 import { fade, makeStyles } from "@material-ui/core";
 
 export const useStyles = makeStyles((theme) => ({
+  root: {
+    justifyContent: "center",
+  },
   gridItem: {
     minWidth: `${375 - theme.spacing(2)}px`,
   },
