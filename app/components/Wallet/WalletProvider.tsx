@@ -48,7 +48,8 @@ export default function WalletProvider(
   const [providerName, setProviderName] = useState<string>("Phantom");
   const [connected, setConnected] = useState<boolean>(false);
   const [networkUrl, setNetworkUrl] = useState(NETWORK_URL_KEY);
-  let [wallet, setWallet] = useState<any>(undefined);
+
+  const [wallet, setWallet] = useState();
 
   // const seed = "testSeed";
   // let userWallet: any;
@@ -61,30 +62,27 @@ export default function WalletProvider(
 
   const { provider, connection } = useMemo(() => {
     const opts: web3.ConfirmOptions = {
-      preflightCommitment: "singleGossip",
-      commitment: "confirmed",
+      confirmations: 10,
     };
 
     switch (providerName) {
       case "Phantom":
         if (window.solana && window.solana?.isPhantom) {
-          wallet = window.solana;
+          setWallet(window.solana);
           // Redirect to Phantom website
         } else {
           WALLET_URL_KEY = "https://phantom.app/";
-          wallet = new Wallet(WALLET_URL_KEY, NETWORK_URL_KEY);
+          setWallet(new Wallet(WALLET_URL_KEY, NETWORK_URL_KEY));
         }
         break;
       case "Sollet":
         WALLET_URL_KEY = "https://www.sollet.io";
-        wallet = new Wallet(WALLET_URL_KEY, NETWORK_URL_KEY);
+        setWallet(new Wallet(WALLET_URL_KEY, NETWORK_URL_KEY));
         break;
       default:
         WALLET_URL_KEY = "https://phantom.app/";
-        wallet = new Wallet(WALLET_URL_KEY, NETWORK_URL_KEY);
+        setWallet(new Wallet(WALLET_URL_KEY, NETWORK_URL_KEY));
     }
-
-    setWallet(wallet);
 
     const connection = new web3.Connection(NETWORK_URL_KEY, "root");
     const provider = new Provider(connection, wallet, opts);
@@ -98,11 +96,11 @@ export default function WalletProvider(
   }, [providerName, networkUrl]);
 
   useEffect(() => {
+    console.log("USE EFFECT WALLET");
     if (wallet) {
       wallet.on("connect", () => {
         if (wallet?.publicKey) {
-          console.log("connected");
-          setConnected(true);
+          // setConnected(true);
           const walletPublicKey = wallet.publicKey.toBase58();
           const keyToDisplay =
             walletPublicKey.length > 20
@@ -120,19 +118,15 @@ export default function WalletProvider(
       });
 
       wallet.on("disconnect", () => {
-        setConnected(false);
+        if (wallet && wallet.connected) {
+          console.log("SHOULD NOT PASS HERE");
+          // setConnected(false);
+        }
       });
+    } else {
+      console.log("No wallet");
     }
-
-    return () => {
-      console.log("Should not pass");
-      setConnected(false);
-      if (wallet && wallet.connected) {
-        wallet.disconnect();
-        setConnected(false);
-      }
-    };
-  }, [wallet]);
+  }, [wallet, connected]);
 
   return (
     <WalletContext.Provider

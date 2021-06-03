@@ -23,7 +23,7 @@ interface Props {
 export function PageLayout({ title, children }: Props): ReactElement {
   const classes = useStyles();
   const history = useHistory();
-  const { connected, wallet } = useWallet();
+  const { connected } = useWallet();
 
   useEffect(() => {
     document.title = title;

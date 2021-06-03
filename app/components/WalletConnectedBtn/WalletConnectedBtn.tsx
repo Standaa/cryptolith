@@ -16,21 +16,17 @@ export function WalletConnectedBtn(): ReactElement {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (event: any) => {
-    // Disconnect
+  const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const copyAddress = () => {
-    console.log("copy");
-  };
-
   const disconnectWallet = () => {
+    console.log("Disconnect wallet click");
+    wallet.disconnect();
     setConnected(false);
-    console.log("Disconnect Wallet");
   };
 
-  const walletPublicKey = wallet.publicKey.toBase58();
+  const walletPublicKey = wallet?.publicKey?.toBase58();
 
   return (
     <Box className={classes.container}>
@@ -54,7 +50,12 @@ export function WalletConnectedBtn(): ReactElement {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem className={classes.walletConnMenu} onClick={copyAddress}>
+        <MenuItem
+          className={classes.walletConnMenu}
+          onClick={() =>
+            navigator.clipboard.writeText(walletPublicKey) && handleClose()
+          }
+        >
           Copy Address
         </MenuItem>
         <MenuItem className={classes.walletConnMenu} onClick={disconnectWallet}>
