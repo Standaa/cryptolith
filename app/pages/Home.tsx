@@ -203,7 +203,12 @@ export function Home(): ReactElement {
         {liths &&
           liths.map((lith, index) => {
             return (
-              <Grid key={`sthg+${index}`} item xs={4}>
+              <Grid
+                key={`sthg+${index}`}
+                className={classes.gridItem}
+                item
+                xs={3}
+              >
                 <Paper className={classes.paper}>
                   <video width="200" autoPlay loop>
                     <source src={lith.src} type="video/webm"></source>

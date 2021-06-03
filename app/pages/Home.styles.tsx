@@ -1,11 +1,8 @@
 import { fade, makeStyles } from "@material-ui/core";
 
 export const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  margin: {
-    margin: theme.spacing(1),
+  gridItem: {
+    minWidth: `${375 - theme.spacing(2)}px`,
   },
   paper: {
     padding: theme.spacing(2),
@@ -14,6 +11,8 @@ export const useStyles = makeStyles((theme) => ({
     background: theme.palette.secondary.main,
     border: "solid white 1px",
     cursor: "pointer",
+    minWidth: `${375 - 2 * theme.spacing(2)}px`,
+    minHeight: "410px",
   },
   link: {
     color: "red",
