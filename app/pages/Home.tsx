@@ -210,8 +210,14 @@ export function Home(): ReactElement {
                 xs={3}
               >
                 <Paper className={classes.paper}>
-                  <video width="200" autoPlay loop playsInline>
-                    <source src={lith.src} type="video/webm"></source>
+                  <video
+                    width="200"
+                    autoPlay
+                    loop
+                    playsInline
+                    style={{ width: 300, height: 300 }}
+                  >
+                    <source src={lith.src} type="video/mp4"></source>
                   </video>
                   <LithInfo
                     lithNumber={index}
