@@ -96,11 +96,9 @@ export default function WalletProvider(
   }, [providerName, networkUrl]);
 
   useEffect(() => {
-    console.log("USE EFFECT WALLET");
     if (wallet) {
       wallet.on("connect", () => {
         if (wallet?.publicKey) {
-          // setConnected(true);
           const walletPublicKey = wallet.publicKey.toBase58();
           const keyToDisplay =
             walletPublicKey.length > 20
@@ -118,13 +116,8 @@ export default function WalletProvider(
       });
 
       wallet.on("disconnect", () => {
-        if (wallet && wallet.connected) {
-          console.log("SHOULD NOT PASS HERE");
-          // setConnected(false);
-        }
+        console.log("Wallet disconnected");
       });
-    } else {
-      console.log("No wallet");
     }
   }, [wallet, connected]);
 
