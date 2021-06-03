@@ -10,6 +10,7 @@ export interface LithInfoProps {
   height: number;
   patrons: number;
   geo: string;
+  src?: any;
 }
 
 export function LithInfo(props: LithInfoProps): ReactElement {

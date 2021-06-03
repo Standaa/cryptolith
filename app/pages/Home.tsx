@@ -4,10 +4,19 @@ import { useHistory } from "react-router-dom";
 
 import { useStyles } from "./Home.styles";
 import { PageLayout } from "../components/PageLayout/PageLayout";
-import lithvid from "../assets/lith0.webm";
 import { BottomInfo } from "../components/BottomInfo";
 import { LithInfo } from "../components/LithInfo";
 import { LithInfoProps } from "../components/LithInfo/LithInfo";
+
+import lith0 from "../assets/Lith0_300px.webm";
+import lith1 from "../assets/Lith1_300px.webm";
+import lith2 from "../assets/Lith2_300px.webm";
+import lith3 from "../assets/Lith3_300px.webm";
+import lith4 from "../assets/Lith4_300px.webm";
+import lith5 from "../assets/Lith5_300px.webm";
+import lith6 from "../assets/Lith6_300px.webm";
+import lith7 from "../assets/Lith7_300px.webm";
+import lith8 from "../assets/Lith8_300px.webm";
 
 export function Home(): ReactElement {
   const classes = useStyles();
@@ -20,6 +29,7 @@ export function Home(): ReactElement {
       height: 3,
       patrons: 1,
       geo: "Fréhel",
+      src: lith0,
     },
     {
       fundingLevel: 10,
@@ -27,6 +37,7 @@ export function Home(): ReactElement {
       height: 3,
       patrons: 1,
       geo: "Fréhel",
+      src: lith1,
     },
     {
       fundingLevel: 10,
@@ -34,6 +45,7 @@ export function Home(): ReactElement {
       height: 3,
       patrons: 1,
       geo: "Fréhel",
+      src: lith2,
     },
     {
       fundingLevel: 10,
@@ -41,6 +53,7 @@ export function Home(): ReactElement {
       height: 3,
       patrons: 1,
       geo: "Fréhel",
+      src: lith3,
     },
     {
       fundingLevel: 10,
@@ -48,6 +61,7 @@ export function Home(): ReactElement {
       height: 3,
       patrons: 1,
       geo: "Fréhel",
+      src: lith4,
     },
     {
       fundingLevel: 10,
@@ -55,6 +69,7 @@ export function Home(): ReactElement {
       height: 3,
       patrons: 1,
       geo: "Fréhel",
+      src: lith5,
     },
     {
       fundingLevel: 10,
@@ -62,6 +77,7 @@ export function Home(): ReactElement {
       height: 3,
       patrons: 1,
       geo: "Fréhel",
+      src: lith6,
     },
     {
       fundingLevel: 10,
@@ -69,6 +85,7 @@ export function Home(): ReactElement {
       height: 3,
       patrons: 1,
       geo: "Fréhel",
+      src: lith7,
     },
     {
       fundingLevel: 10,
@@ -76,6 +93,7 @@ export function Home(): ReactElement {
       height: 3,
       patrons: 1,
       geo: "Fréhel",
+      src: lith8,
     },
   ];
 
@@ -92,8 +110,8 @@ export function Home(): ReactElement {
                     history.push(`/cryptolith/${index}`);
                   }}
                 >
-                  <video width="100" autoPlay loop>
-                    <source src={lithvid} type="video/webm"></source>
+                  <video width="200" autoPlay loop>
+                    <source src={lith.src} type="video/webm"></source>
                   </video>
                   <LithInfo
                     lithNumber={index}
