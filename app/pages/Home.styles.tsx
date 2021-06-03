@@ -1,9 +1,11 @@
-import { makeStyles } from "@material-ui/core";
-import { SYSVAR_RECENT_BLOCKHASHES_PUBKEY } from "@solana/web3.js";
+import { fade, makeStyles } from "@material-ui/core";
 
 export const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+  },
+  margin: {
+    margin: theme.spacing(1),
   },
   paper: {
     padding: theme.spacing(2),
@@ -15,5 +17,23 @@ export const useStyles = makeStyles((theme) => ({
   },
   link: {
     color: "red",
+  },
+  contributeBtn: {
+    marginTop: "1rem",
+  },
+  formContainer: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  amountInput: {
+    height: "40px",
+    border: "solid 1px #D3D3D3",
+    background: "black",
+    color: theme.palette.primary.main,
+    borderRadius: "5px",
+    "&:focus": {
+      outline: "1px solid white",
+      boxShadow: "none",
+    },
   },
 }));
