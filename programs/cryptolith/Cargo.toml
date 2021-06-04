@@ -15,4 +15,6 @@ cpi = ["no-entrypoint"]
 default = []
 
 [dependencies]
-anchor-lang = "0.4.4"
+anchor-lang = "0.7.0"
+anchor-spl = "0.7.0"
+spl-math = { version = "0.1", features = [ "no-entrypoint" ] }
