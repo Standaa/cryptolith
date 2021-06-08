@@ -54,74 +54,74 @@ export function Home(): ReactElement {
 
   const liths: LithInfoProps[] = [
     {
-      fundingLevel: 10,
-      committedAmount: 20,
+      fundingLevel: 0,
+      committedAmount: 0,
       height: 3,
-      patrons: 1,
+      patrons: 0,
       geo: "Fréhel",
       src: lith0,
     },
     {
-      fundingLevel: 10,
-      committedAmount: 20,
-      height: 3,
-      patrons: 1,
+      fundingLevel: 0,
+      committedAmount: 0,
+      height: 2.7,
+      patrons: 0,
       geo: "Fréhel",
       src: lith1,
     },
     {
-      fundingLevel: 10,
-      committedAmount: 20,
-      height: 3,
-      patrons: 1,
+      fundingLevel: 0,
+      committedAmount: 0,
+      height: 3.4,
+      patrons: 0,
       geo: "Fréhel",
       src: lith2,
     },
     {
-      fundingLevel: 10,
-      committedAmount: 20,
-      height: 3,
-      patrons: 1,
+      fundingLevel: 0,
+      committedAmount: 0,
+      height: 3.2,
+      patrons: 0,
       geo: "Fréhel",
       src: lith3,
     },
     {
-      fundingLevel: 10,
-      committedAmount: 20,
-      height: 3,
-      patrons: 1,
+      fundingLevel: 0,
+      committedAmount: 0,
+      height: 2.8,
+      patrons: 0,
       geo: "Fréhel",
       src: lith4,
     },
     {
-      fundingLevel: 10,
-      committedAmount: 20,
-      height: 3,
-      patrons: 1,
+      fundingLevel: 0,
+      committedAmount: 0,
+      height: 2.8,
+      patrons: 0,
       geo: "Fréhel",
       src: lith5,
     },
     {
-      fundingLevel: 10,
-      committedAmount: 20,
-      height: 3,
-      patrons: 1,
+      fundingLevel: 0,
+      committedAmount: 0,
+      height: 3.1,
+      patrons: 0,
       geo: "Fréhel",
       src: lith6,
     },
     {
-      fundingLevel: 10,
-      committedAmount: 20,
-      height: 3,
-      patrons: 1,
+      fundingLevel: 0,
+      committedAmount: 0,
+      height: 3.2,
+      patrons: 0,
       geo: "Fréhel",
       src: lith7,
     },
     {
-      fundingLevel: 10,
-      committedAmount: 20,
-      height: 3,
-      patrons: 1,
+      fundingLevel: 0,
+      committedAmount: 0,
+      height: 3.5,
+      patrons: 0,
       geo: "Fréhel",
       src: lith8,
     },
@@ -167,8 +167,7 @@ export function Home(): ReactElement {
         <DialogTitle id="contribute-dialog-title">Contribute</DialogTitle>
         <DialogContent>
           <DialogContentText color="primary">
-            Contribute to this Lith and claim your share of the Cryptolithic
-            age.
+            Contribute to this Lith and claim your share of the Cryptolithic age.
           </DialogContentText>
 
           <Box className={classes.formContainer}>
@@ -203,20 +202,9 @@ export function Home(): ReactElement {
         {liths &&
           liths.map((lith, index) => {
             return (
-              <Grid
-                key={`sthg+${index}`}
-                className={classes.gridItem}
-                item
-                xs={3}
-              >
+              <Grid key={`sthg+${index}`} className={classes.gridItem} item xs={3}>
                 <Paper className={classes.paper}>
-                  <video
-                    width="200"
-                    autoPlay
-                    loop
-                    playsInline
-                    style={{ width: 300, height: 300 }}
-                  >
+                  <video width="200" autoPlay loop playsInline style={{ width: 300, height: 300 }}>
                     <source src={lith.src} type="video/mp4"></source>
                   </video>
                   <LithInfo
