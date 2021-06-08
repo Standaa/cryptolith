@@ -1,36 +1,42 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, MintTo, TokenAccount, Transfer};
 
-const CRYPTOLITH_SEED: &str = "WELCOMETOTHECRYPTOLITHICAGE";
-const CRYPTOLITHN_SEED: &str = "PAMPIT";
+const LITH_SEED: &str = "WELCOMETOTHECRYPTOLITHICAGE";
+const LITH_CHILD_SEED: &str = "PAMPIT";
 
 #[program]
 mod cryptolith {
     use super::*;
 
     // Specify size for dynamic vec allocation
-    #[state(1024)]
+    #[state(2048)]
     pub struct CryptolithState {
         pub initialized: bool,
-        pub nonce: u8,
         pub authority: Pubkey,
         pub signer: Pubkey,
-        pub lith_token_mint: Pubkey,
-        pub lith_token_account: Pubkey,
+        pub lith_nonce: u8,
+        pub lith_mint: Pubkey,
+        pub lith_account: Pubkey,
         pub lith_total_supply: u64,
         pub cryptoliths: Vec<Cryptolith>,
+        pub lith_children_nonces: Vec<u8>,
+        pub lith_children_token_mints: Vec<Pubkey>,
+        pub lith_children_token_accounts: Vec<Pubkey>,
     }
 
     impl CryptolithState {
         pub fn new(_ctx: Context<New>) -> Result<Self> {
             Ok(Self {
                 initialized: false,
-                nonce: 0,
                 authority: Pubkey::default(),
                 signer: Pubkey::default(),
-                lith_token_mint: Pubkey::default(),
-                lith_token_account: Pubkey::default(),
+                lith_nonce: 0,
+                lith_mint: Pubkey::default(),
+                lith_account: Pubkey::default(),
                 lith_total_supply: 0,
+                lith_children_nonces: Vec::new(),
+                lith_children_token_mints: Vec::new(),
+                lith_children_token_accounts: Vec::new(),
                 cryptoliths: Vec::new(),
             })
         }
@@ -39,30 +45,29 @@ mod cryptolith {
             &mut self,
             ctx: Context<Initialize>,
             nonce: u8,
-            noncen: u8,
             authority: Pubkey,
             signer: Pubkey,
         ) -> Result<()> {
             msg!("Initialize Cryptolith state!");
             self.initialized = true;
-            self.nonce = nonce;
             self.signer = signer;
             self.authority = authority;
-            self.lith_token_mint = *ctx.accounts.lith_mint.to_account_info().key; // Token Mint Account pub key
-            self.lith_token_account = *ctx.accounts.program_lith_account.to_account_info().key; // Token Mint Account pub key
+            self.lith_nonce = nonce;
+            self.lith_mint = *ctx.accounts.lith_mint.to_account_info().key; // Token Mint Account pub key
+            self.lith_account = *ctx.accounts.lith_account.to_account_info().key; // Token Mint Account pub key
 
             // Mint total token supply to deployer account
             let amount = u64::pow(10, 8);
             self.lith_total_supply = amount.clone();
 
-            let seeds = &[CRYPTOLITH_SEED.as_bytes(), &[self.nonce]];
+            let seeds = &[LITH_SEED.as_bytes(), &[self.lith_nonce]];
             let signer = &[&seeds[..]];
 
             let cpi_ctx = CpiContext::new_with_signer(
                 ctx.accounts.token_program.clone(),
                 MintTo {
                     mint: ctx.accounts.lith_mint.to_account_info(),
-                    to: ctx.accounts.program_lith_account.to_account_info(),
+                    to: ctx.accounts.lith_account.to_account_info(),
                     authority: ctx.accounts.lith_mint_authority.to_account_info(),
                 },
                 signer,
@@ -76,7 +81,7 @@ mod cryptolith {
             let cpi_ctx = CpiContext::new_with_signer(
                 ctx.accounts.token_program.clone(),
                 Transfer {
-                    from: ctx.accounts.program_lith_account.to_account_info(),
+                    from: ctx.accounts.lith_account.to_account_info(),
                     to: ctx.accounts.user_lith_address.to_account_info(),
                     authority: ctx.accounts.lith_mint_authority.to_account_info(),
                 },
@@ -84,37 +89,51 @@ mod cryptolith {
             );
             token::transfer(cpi_ctx, amount_to_transfer)?;
 
-            let n_seeds = &[CRYPTOLITHN_SEED.as_bytes(), &[noncen]];
-            let n_signer = &[&n_seeds[..]];
-
-            let cpi_ctx = CpiContext::new_with_signer(
-                ctx.accounts.token_program.clone(),
-                MintTo {
-                    mint: ctx.accounts.lith_n_mint.to_account_info(),
-                    to: ctx.accounts.program_lith_n_account.to_account_info(),
-                    authority: ctx.accounts.lith_n_mint_authority.to_account_info(),
-                },
-                n_signer,
-            );
-            token::mint_to(cpi_ctx, amount)?;
-
             Ok(())
         }
 
-        pub fn create_cryptolith(&mut self, ctx: Context<CreateCryptolith>) -> Result<()> {
+        pub fn create_cryptolith(
+            &mut self,
+            ctx: Context<CreateCryptolith>,
+            lith_child_nonce: u8,
+            realisation_amount: u64,
+        ) -> Result<()> {
+            msg!("Create new Cryptolith!");
+
             let cryptolith = Cryptolith {
-                id: *ctx.accounts.lithn_token_mint.to_account_info().key,
+                id: *ctx.accounts.lith_child_mint.to_account_info().key,
                 patrons: 0,
                 latitude: 48680752,
                 longitude: 2319358,
                 height: 3,
                 funding_amount: 0,
-                realisation_amount: 20000,
-                mint_account: *ctx.accounts.lithn_token_mint.to_account_info().key,
-                authority: self.authority,
+                realisation_amount: realisation_amount,
+                mint_account: *ctx.accounts.lith_child_mint.to_account_info().key,
+                authority: *ctx.accounts.lith_child_mint_authority.to_account_info().key,
             };
 
-            self.cryptoliths = vec![cryptolith.clone()];
+            if self.cryptoliths.len() == 0 {
+                self.cryptoliths = vec![cryptolith.clone()];
+            } else {
+                self.cryptoliths.push(cryptolith.clone());
+            }
+
+            // Mint total token supply to deployer account
+            let amount = u64::pow(10, 8);
+
+            let seeds = &[LITH_CHILD_SEED.as_bytes(), &[lith_child_nonce]];
+            let signer = &[&seeds[..]];
+
+            let cpi_ctx = CpiContext::new_with_signer(
+                ctx.accounts.token_program.clone(),
+                MintTo {
+                    mint: ctx.accounts.lith_child_mint.to_account_info(),
+                    to: ctx.accounts.lith_child_account.to_account_info(),
+                    authority: ctx.accounts.lith_child_mint_authority.to_account_info(),
+                },
+                signer,
+            );
+            token::mint_to(cpi_ctx, amount)?;
 
             Ok(())
         }
@@ -142,29 +161,29 @@ mod cryptolith {
             );
             token::transfer(cpi_ctx, amount)?;
 
-            let target_cryptolith: Vec<Cryptolith> = self
-                .cryptoliths
-                .clone()
-                .into_iter()
-                .filter(|lith| lith.id == id)
-                .collect();
+            // let target_cryptolith: Vec<Cryptolith> = self
+            //     .cryptoliths
+            //     .clone()
+            //     .into_iter()
+            //     .filter(|lith| lith.id == id)
+            //     .collect();
 
-            // Transfer Lithn back to his address
-            let seeds = &[CRYPTOLITHN_SEED.as_bytes(), &[self.nonce]];
-            let signer = &[&seeds[..]];
+            // // Transfer Lithn back to his address
+            // let seeds = &[CRYPTOLITH_CHILD_SEED.as_bytes(), &[self.nonce]];
+            // let signer = &[&seeds[..]];
 
-            let lithn_amount = amount / 10;
+            // let lithn_amount = amount / 10;
 
-            let cpi_ctx = CpiContext::new_with_signer(
-                ctx.accounts.token_program.clone(),
-                Transfer {
-                    from: ctx.accounts.from_lithn.to_account_info(),
-                    to: ctx.accounts.to_lithn.to_account_info(),
-                    authority: ctx.accounts.lithn_authority.to_account_info(),
-                },
-                signer,
-            );
-            token::transfer(cpi_ctx, lithn_amount)?;
+            // let cpi_ctx = CpiContext::new_with_signer(
+            //     ctx.accounts.token_program.clone(),
+            //     Transfer {
+            //         from: ctx.accounts.from_lithn.to_account_info(),
+            //         to: ctx.accounts.to_lithn.to_account_info(),
+            //         authority: ctx.accounts.lithn_authority.to_account_info(),
+            //     },
+            //     signer,
+            // );
+            // token::transfer(cpi_ctx, lithn_amount)?;
 
             Ok(())
         }
@@ -185,24 +204,22 @@ pub struct Initialize<'info> {
     lith_mint: CpiAccount<'info, Mint>,
     lith_mint_authority: AccountInfo<'info>,
     #[account(mut)]
-    program_lith_account: CpiAccount<'info, TokenAccount>,
+    lith_account: CpiAccount<'info, TokenAccount>,
     #[account(mut)]
     user_lith_address: CpiAccount<'info, TokenAccount>,
-    #[account(mut, "lith_n_mint.decimals == 8")]
-    lith_n_mint: CpiAccount<'info, Mint>,
-    lith_n_mint_authority: AccountInfo<'info>,
-    #[account(mut)]
-    program_lith_n_account: CpiAccount<'info, TokenAccount>,
     #[account("token_program.key == &token::ID")]
     token_program: AccountInfo<'info>,
 }
 
 #[derive(Accounts)]
 pub struct CreateCryptolith<'info> {
-    #[account(mut, "lithn_token_mint.decimals == 8")]
-    lithn_token_mint: CpiAccount<'info, Mint>,
-    // #[account(signer)]
-    // authority: AccountInfo<'info>,
+    #[account(mut, "lith_child_mint.decimals == 8")]
+    lith_child_mint: CpiAccount<'info, Mint>,
+    lith_child_mint_authority: AccountInfo<'info>,
+    #[account(mut)]
+    lith_child_account: CpiAccount<'info, TokenAccount>,
+    #[account("token_program.key == &token::ID")]
+    token_program: AccountInfo<'info>,
 }
 
 #[derive(Accounts)]
