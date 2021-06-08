@@ -90,8 +90,6 @@ describe("cryptolith", () => {
       TOKEN_PROGRAM_ID,
     );
 
-    console.log("lithChildMint", lithChildMint.publicKey);
-
     lithChildAccount = await lithChildMint.createAccount(_lithChildAuthority);
     userLithChildAddress = await lithChildMint.createAssociatedTokenAccount(provider.wallet.publicKey);
 
@@ -105,41 +103,38 @@ describe("cryptolith", () => {
     });
 
     const cryptolithStateAfterInit = await cryptolithProgram.state.fetch();
-    // assert.ok(cryptolithStateAfterInit.cryptoliths[0].patrons === 0);
-    // assert.ok(cryptolithStateAfterInit.cryptoliths[0].latitude === 48680752);
-    // assert.ok(cryptolithStateAfterInit.cryptoliths[0].longitude === 2319358);
-    // assert.ok(
-    //   cryptolithStateAfterInit.cryptoliths[0].mintAccount.toBase58() === lithChildMint.publicKey.toBase58(),
-    // );
-    assert.ok(true);
+    assert.ok(cryptolithStateAfterInit.cryptoliths[0].patrons === 0);
+    assert.ok(cryptolithStateAfterInit.cryptoliths[0].latitude === 48680752);
+    assert.ok(cryptolithStateAfterInit.cryptoliths[0].longitude === 2319358);
+    assert.ok(cryptolithStateAfterInit.cryptoliths[0].mint.toBase58() === lithChildMint.publicKey.toBase58());
   });
 
-  // it("Contributes to Cryptolith", async () => {
-  //   const ix = await cryptolithProgram.state.instruction.contributeCryptolith(
-  //     new BN(10),
-  //     lithChildMint.publicKey,
-  //     {
-  //       accounts: {
-  //         fromLith: lithAccount,
-  //         toLith: userLithAddress,
-  //         lithAuthority: lithMint.publicKey,
-  //         fromLithn: lithChildAccount,
-  //         toLithn: userLithChildAddress,
-  //         lithnAuthority: lithChildMint.publicKey,
-  //         tokenProgram: TOKEN_PROGRAM_ID,
-  //       },
-  //       signer: [provider.wallet.publicKey],
-  //     },
-  //   );
+  it("Contributes to Cryptolith", async () => {
+    const ix = await cryptolithProgram.state.instruction.contributeCryptolith(
+      new BN(10),
+      lithChildMint.publicKey,
+      {
+        accounts: {
+          fromLith: lithAccount,
+          toLith: userLithAddress,
+          lithAuthority: lithMint.publicKey,
+          fromLithChild: lithChildAccount,
+          toLithChild: userLithChildAddress,
+          lithChildAuthority: lithChildMint.publicKey,
+          tokenProgram: TOKEN_PROGRAM_ID,
+        },
+        signer: [provider.wallet.publicKey],
+      },
+    );
 
-  //   let tx = new web3.Transaction().add(ix);
+    let tx = new web3.Transaction().add(ix);
 
-  //   let { blockhash } = await provider.connection.getRecentBlockhash();
-  //   tx.recentBlockhash = blockhash;
-  //   tx.feePayer = provider.wallet.publicKey;
-  //   await provider.wallet.signTransaction(tx);
+    let { blockhash } = await provider.connection.getRecentBlockhash();
+    tx.recentBlockhash = blockhash;
+    tx.feePayer = provider.wallet.publicKey;
+    await provider.wallet.signTransaction(tx);
 
-  //   const userAccountAfterContribution = await lithMint.getAccountInfo(userLithAddress);
-  //   assert.ok(userAccountAfterContribution.amount.toNumber() === 5e7);
-  // });
+    const userAccountAfterContribution = await lithMint.getAccountInfo(userLithAddress);
+    assert.ok(userAccountAfterContribution.amount.toNumber() === 5e7);
+  });
 });
