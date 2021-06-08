@@ -30,8 +30,16 @@ describe("cryptolith", () => {
       cryptolithProgram.programId,
     );
 
+    const [_cryptolithnAuthority, _noncen] = await web3.PublicKey.findProgramAddress(
+      [CRYPTOLITHN_SEED],
+      cryptolithProgram.programId,
+    );
+
     cryptolithAuthority = _cryptolithAuthority;
     nonce = _nonce;
+
+    cryptolithnAuthority = _cryptolithnAuthority;
+    noncen = _noncen;
 
     lithTokenMint = await Token.createMint(
       provider.connection,
@@ -42,27 +50,19 @@ describe("cryptolith", () => {
       TOKEN_PROGRAM_ID,
     );
 
-    lithTokenAccount = await lithTokenMint.createAccount(cryptolithAuthority);
-    userLithAddress = await lithTokenMint.createAssociatedTokenAccount(provider.wallet.publicKey);
-
-    const [_cryptolithnAuthority, _noncen] = await web3.PublicKey.findProgramAddress(
-      [CRYPTOLITHN_SEED],
-      cryptolithProgram.programId,
-    );
-
-    cryptolithnAuthority = _cryptolithnAuthority;
-    noncen = _noncen;
-
     lithnTokenMint = await Token.createMint(
       provider.connection,
       payer,
-      cryptolithAuthority,
+      cryptolithnAuthority,
       null,
       8,
       TOKEN_PROGRAM_ID,
     );
 
-    lithnTokenAccount = await lithnTokenMint.createAccount(cryptolithAuthority);
+    lithTokenAccount = await lithTokenMint.createAccount(cryptolithAuthority);
+    userLithAddress = await lithTokenMint.createAssociatedTokenAccount(provider.wallet.publicKey);
+
+    lithnTokenAccount = await lithnTokenMint.createAccount(cryptolithnAuthority);
     userLithnAddress = await lithnTokenMint.createAssociatedTokenAccount(provider.wallet.publicKey);
   });
 
@@ -119,7 +119,7 @@ describe("cryptolith", () => {
     );
   });
 
-  it.skip("Contributes to Cryptolith", async () => {
+  it("Contributes to Cryptolith", async () => {
     const ix = await cryptolithProgram.state.instruction.contributeCryptolith(
       new BN(10),
       lithnTokenMint.publicKey,
@@ -128,6 +128,9 @@ describe("cryptolith", () => {
           fromLith: lithTokenAccount,
           toLith: userLithAddress,
           lithAuthority: lithTokenMint.publicKey,
+          fromLithn: lithnTokenAccount,
+          toLithn: userLithnAddress,
+          lithnAuthority: lithnTokenMint.publicKey,
           tokenProgram: TOKEN_PROGRAM_ID,
         },
         signer: [provider.wallet.publicKey],
