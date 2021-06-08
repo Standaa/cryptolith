@@ -9,7 +9,7 @@ mod cryptolith {
     use super::*;
 
     // Specify size for dynamic vec allocation
-    #[state(2048)]
+    #[state(1024)]
     pub struct CryptolithState {
         pub initialized: bool,
         pub authority: Pubkey,
@@ -44,9 +44,9 @@ mod cryptolith {
         ) -> Result<()> {
             msg!("Initialize Cryptolith state!");
             self.initialized = true;
+            self.lith_nonce = nonce;
             self.signer = signer;
             self.authority = authority;
-            self.lith_nonce = nonce;
             self.lith_mint = *ctx.accounts.lith_mint.to_account_info().key; // Token Mint Account pub key
             self.lith_account = *ctx.accounts.lith_account.to_account_info().key; // Token Mint Account pub key
 
@@ -68,20 +68,20 @@ mod cryptolith {
             );
             token::mint_to(cpi_ctx, amount)?;
 
-            let amount_to_transfer = amount / 2;
+            // let amount_to_transfer = amount / 2;
 
             /*  TODO: REMOVE FOR TEST PURPOSES ONLY
             Lith should not be transferred to user on init */
-            let cpi_ctx = CpiContext::new_with_signer(
-                ctx.accounts.token_program.clone(),
-                Transfer {
-                    from: ctx.accounts.lith_account.to_account_info(),
-                    to: ctx.accounts.user_lith_address.to_account_info(),
-                    authority: ctx.accounts.lith_mint_authority.to_account_info(),
-                },
-                signer,
-            );
-            token::transfer(cpi_ctx, amount_to_transfer)?;
+            // let cpi_ctx = CpiContext::new_with_signer(
+            //     ctx.accounts.token_program.clone(),
+            //     Transfer {
+            //         from: ctx.accounts.lith_account.to_account_info(),
+            //         to: ctx.accounts.user_lith_address.to_account_info(),
+            //         authority: ctx.accounts.lith_mint_authority.to_account_info(),
+            //     },
+            //     signer,
+            // );
+            // token::transfer(cpi_ctx, amount_to_transfer)?;
 
             Ok(())
         }
@@ -203,8 +203,9 @@ pub struct Initialize<'info> {
     lith_mint_authority: AccountInfo<'info>,
     #[account(mut)]
     lith_account: CpiAccount<'info, TokenAccount>,
-    #[account(mut)]
-    user_lith_address: CpiAccount<'info, TokenAccount>,
+    // For testing purposes
+    // #[account(mut)]
+    // user_lith_address: CpiAccount<'info, TokenAccount>,
     #[account("token_program.key == &token::ID")]
     token_program: AccountInfo<'info>,
 }
