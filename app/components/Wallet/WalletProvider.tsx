@@ -50,7 +50,7 @@ export default function WalletProvider(props: PropsWithChildren<ReactNode>): Rea
 
   const { provider, connection, cryptolithProgram } = useMemo(() => {
     const opts: web3.ConfirmOptions = {
-      commitment: "finalized",
+      commitment: "confirmed",
     };
 
     switch (providerName) {

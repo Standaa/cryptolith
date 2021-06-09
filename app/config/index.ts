@@ -7,6 +7,6 @@ export const config = {
   programId: "DQkmHgihpbZ17dnWEairM7VuZGt7W1jsmxXF6LG2oRK",
   lithAuthority: "4WECXhyb7QMBdqzzUSCqoY26sK4KGgPiGW5yvGF3f6yd",
   lithChildAuthority: "53hxWggK22pzviuVB2BT17cBRhiovAuirzH5287UENk6",
-  lithChildMintTest: "7XkmqgbTFZTH62NQp4gtaHWokuRBcM2BZDssCBoVvVxg",
+  lithChildMint: "7XkmqgbTFZTH62NQp4gtaHWokuRBcM2BZDssCBoVvVxg",
   lithChildAccount: "7cYPN5syBDenTXPiE46dVJZ1vraeGUn8fuR25UCAKxX9",
 };

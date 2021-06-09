@@ -10,8 +10,7 @@ import {
   Grid,
   Paper,
 } from "@material-ui/core";
-import React, { ChangeEvent, ReactElement, useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { ReactElement, useState } from "react";
 
 import { useStyles } from "./Home.styles";
 import { PageLayout } from "../components/PageLayout/PageLayout";
@@ -30,19 +29,14 @@ import lith6 from "../assets/Lith6_500px.mp4";
 import lith7 from "../assets/Lith7_500px.mp4";
 import lith8 from "../assets/Lith8_500px.mp4";
 import { theme } from "../themes/defaultTheme";
-import { ASSOCIATED_TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { BN, web3 } from "@project-serum/anchor";
 import { config } from "../config";
-import { getAssociatedAddress, sleep } from "../utils";
+import { getAssociatedAddress } from "../utils";
 
 export function Home(): ReactElement {
   const classes = useStyles();
-  const history = useHistory();
-
-  const { provider, wallet, connection, cryptolithProgram } = useWallet();
-
-  const LITH_SEED = Buffer.from("WELCOMETOTHECRYPTOLITHICAGE");
-
+  const { wallet, connection, cryptolithProgram } = useWallet();
   const [open, setOpen] = useState(false);
   const [contributeAmount, setContributeAmount] = useState(10);
 
@@ -139,30 +133,35 @@ export function Home(): ReactElement {
 
       const userAssociatedLithAddress = await getAssociatedAddress(connection, lithMint, wallet);
 
-      console.log("userAssociatedTokenAddress", userAssociatedLithAddress.address.toBase58());
+      console.log("userAssociatedLithAddress", userAssociatedLithAddress.address.toBase58());
 
       const lithAccount: web3.PublicKey = lithState.lithAccount;
       console.log("lithAccount", lithAccount.toBase58());
 
       console.log("Lith Program state", await cryptolithProgram.state.fetch());
 
-      const lithChildMint = new web3.PublicKey(config.lithChildMintTest);
+      const lithChildMint = new web3.PublicKey(config.lithChildMint);
 
       const userAssociatedLithChildAddress = await getAssociatedAddress(connection, lithChildMint, wallet);
+      console.log("userAssociatedLithChildAddress", userAssociatedLithChildAddress.address.toBase58());
 
-      // const success = await cryptolithProgram.state.rpc.contributeCryptolith(
-      //   new BN(contributeAmount),
-      //   new web3.PublicKey(config.lithChildMintTest), {
-      //     accounts: {
-      //       fromLith: lithAccount,
-      //       toLith: userAssociatedLithAddress,
-      //       lithAuthority: new web3.PublicKey(config.lithAuthority),
-      //       fromLithChild: new web3.PublicKey(config.lithChildAccount),
-      //       toLithChild: userAssociatedLithChildAddress,
-      //       lithChildAuthority: new web3.PublicKey(config.lithChildMintTest),
-      //       tokenProgram: TOKEN_PROGRAM_ID,
-      //   }
-      // );
+      const success = await cryptolithProgram.state.rpc.contributeCryptolith(
+        new BN(contributeAmount),
+        new web3.PublicKey(config.lithChildMint),
+        {
+          accounts: {
+            fromLith: lithAccount,
+            toLith: userAssociatedLithAddress,
+            lithAuthority: new web3.PublicKey(config.lithAuthority),
+            fromLithChild: new web3.PublicKey(config.lithChildAccount),
+            toLithChild: userAssociatedLithChildAddress,
+            lithChildAuthority: new web3.PublicKey(config.lithChildMint),
+            tokenProgram: TOKEN_PROGRAM_ID,
+          },
+        },
+      );
+
+      console.log(success);
 
       // const ix = await cryptolithProgram.state.instruction.contributeCryptolith(
       //   new BN(10),
@@ -187,9 +186,6 @@ export function Home(): ReactElement {
       // tx.recentBlockhash = blockhash;
       // tx.feePayer = provider.wallet.publicKey;
       // await provider.wallet.signTransaction(tx);
-
-      console.log("sleep");
-      await sleep(5000);
     } catch (err) {
       console.log(err);
     }
