@@ -12,13 +12,11 @@ import React, {
 import { Idl, Program, Provider, web3 } from "@project-serum/anchor";
 import Wallet from "@project-serum/sol-wallet-adapter";
 
-// import { PROVIDER_URL_KEY, NETWORK_URL_KEY } from "../../utils/solana";
-// import { config } from "../../config";
-// import idl from "../../../../derisk-anchor/target/idl/derisk_anchor.json";
+import { config } from "../../config";
+import idl from "../../../target/idl/cryptolith.json";
 
 const NETWORK_URL_KEY = "http://localhost:8899";
 let WALLET_URL_KEY = "https://phantom.app/";
-const PROGRAM_ID_KEY = "BTUP4TioquQzGDE9wD5qiTzPKQjDaaJNxHSdV3rD6JyM";
 
 export type WalletContextValues = {
   provider: Provider;
@@ -28,7 +26,7 @@ export type WalletContextValues = {
   connected: boolean;
   setConnected: any;
   wallet: any;
-  // poolProgram: Program;
+  cryptolithProgram: Program;
   connection: web3.Connection;
 };
 
@@ -42,27 +40,17 @@ export function useWallet(): WalletContextValues {
 
 export const WalletContext = createContext<null | WalletContextValues>(null);
 
-export default function WalletProvider(
-  props: PropsWithChildren<ReactNode>
-): ReactElement {
+export default function WalletProvider(props: PropsWithChildren<ReactNode>): ReactElement {
   const [providerName, setProviderName] = useState<string>("Phantom");
   const [connected, setConnected] = useState<boolean>(false);
   const [networkUrl, setNetworkUrl] = useState(NETWORK_URL_KEY);
 
   const [wallet, setWallet] = useState();
+  const programId = new web3.PublicKey(config.programId);
 
-  // const seed = "testSeed";
-  // let userWallet: any;
-  // let derivedAccount: web3.PublicKey;
-  // let provider: Provider;
-  // let cryptolithProgram: Program;
-
-  // const programId = new web3.PublicKey(config.programId);
-  // const programId = new web3.PublicKey(PROGRAM_ID_KEY);
-
-  const { provider, connection } = useMemo(() => {
+  const { provider, connection, cryptolithProgram } = useMemo(() => {
     const opts: web3.ConfirmOptions = {
-      confirmations: 10,
+      commitment: "finalized",
     };
 
     switch (providerName) {
@@ -86,11 +74,11 @@ export default function WalletProvider(
 
     const connection = new web3.Connection(NETWORK_URL_KEY, "root");
     const provider = new Provider(connection, wallet, opts);
-    // const poolProgram = new Program(idl as Idl, programId, provider);
+    const cryptolithProgram = new Program(idl as Idl, programId, provider);
 
     return {
       provider,
-      // poolProgram,
+      cryptolithProgram,
       connection,
     };
   }, [providerName, networkUrl]);
@@ -102,12 +90,9 @@ export default function WalletProvider(
           const walletPublicKey = wallet.publicKey.toBase58();
           const keyToDisplay =
             walletPublicKey.length > 20
-              ? `${walletPublicKey.substring(
-                  0,
-                  7
-                )}.....${walletPublicKey.substring(
+              ? `${walletPublicKey.substring(0, 7)}.....${walletPublicKey.substring(
                   walletPublicKey.length - 7,
-                  walletPublicKey.length
+                  walletPublicKey.length,
                 )}`
               : walletPublicKey;
 
@@ -131,7 +116,7 @@ export default function WalletProvider(
         wallet,
         connected,
         setConnected,
-        // poolProgram,
+        cryptolithProgram,
         connection,
       }}
     >
