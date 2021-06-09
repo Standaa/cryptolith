@@ -90,6 +90,7 @@ module.exports = async function (provider) {
 
   console.log("Wallet publickey :", provider.wallet.publicKey.toBase58());
   console.log("lithProgram signer :", lithProgramAfterInit.signer.toBase58());
+  console.log("lithAuthority publickey :", lithAuthority.toBase58());
   console.log("lithMint publickey :", lithMint.publicKey.toBase58());
   console.log("lithAccount :", lithAccount.toBase58());
 
