@@ -11,7 +11,7 @@ The question then arises as to what happens when one of these masks has been pri
 
 Cryptolith explores this abstract frontier between the physical and digital representations of a collectible, by creating
 a global monument made of a series of [Megaliths](https://en.wikipedia.org/wiki/Megalith) (stones of various shapes which originated Celtic culture).
-This monument is also an ode to decentralisation, as Megaliths are almost always part of a group.
+This monument is also an ode to decentralisation, as Megaliths are often part of a group.
 
 ### Why ?
 
