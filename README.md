@@ -41,6 +41,7 @@ The way each Cryptolith work is halfway between an ICO and a SPAC.
 
 ### Technology
 
-Cryptolith is built on the Solana blockchain and uses the SPL-token standard.
+Cryptolith is built on the Solana blockchain, the amazing Anchor framework and the SPL token standard.
+
 Solana allows a fairer and easier access to the blockchain. There is no memory pool, no collusion of miners and traders, and transactions are fast and efficient.
 It is the ideal technology to build apps that are accessible to the layman.
