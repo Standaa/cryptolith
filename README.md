@@ -4,7 +4,7 @@
 
 ### What is it ?
 
-Cryptolith is an art project, which aims to bridge the chasm between the digital representation of a collectible and its physical materialisation.
+Cryptolith is an art project, which aims to bridge the gap between the digital representation of a collectible and its physical materialisation.
 
 Blockchain technologies enabled the creation of digital collectibles that cannot be replicated, nonetheless most projects failed to account for the physical materialisation of these pieces. Indeed, how do you prevent the owner of an NFT from printing it ? Projects like [Hashmasks](thehashmasks.com) for example, allow any owner of a mask to print it in high-res.
 The question then arises as to what happens when one of these masks has been printed and ownership is transferred ? In our opinion, there is an inherent loss of value through time.
@@ -37,7 +37,7 @@ The location of the stone will be chosen based on a couple parameters: The chose
 Stone tokens are not NFTs as several users can possess a share in a given stone.
 This mechanism enforces accessibility and shared ownership in stones, while increasing the probability of a stone being actually built.
 
-The way each Cryptolith work is halfway between an ICO and a SPAC.
+The way each Cryptolith work is halfway between an Initial Coin Offering (ICO) and a Special Purpose Acquisition Company (SPAC).
 
 ### Technology
 
